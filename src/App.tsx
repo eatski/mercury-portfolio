@@ -56,12 +56,12 @@ function App() {
     <div className="App">
       <h1>My Profile</h1>
       <div className="card">
-        <textarea value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)}>
+        <textarea className='textarea' value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)}>
         </textarea>
         <MemorizedResult query={query}/>
       </div>
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+        Write query to fetch my profile!!
       </p>
     </div>
   )
