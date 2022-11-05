@@ -1,4 +1,4 @@
-import { Suspense, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { Suspense, useRef, useState } from 'react'
 import {InMemoryCache} from "@apollo/client"
 import './App.css'
 import { server } from './server'
