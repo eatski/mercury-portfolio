@@ -1,6 +1,3 @@
-
-import {Buffer} from "buffer";
-global.Buffer = Buffer;
 import {ApolloServerBase,gql } from "apollo-server-core";
 import { dbPromise } from "./db";
 // The GraphQL schema
