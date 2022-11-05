@@ -5,6 +5,7 @@ import './index.css'
 import initSqlJs from "sql.js";
 import sqlWasm from "sql.js/dist/sql-wasm.wasm?url";
 
+
 initSqlJs({ locateFile: () => sqlWasm }).then(SQL => {
   const db = new SQL.Database();
   // Execute a single SQL string that contains multiple statements
@@ -21,6 +22,44 @@ initSqlJs({ locateFile: () => sqlWasm }).then(SQL => {
   console.log(result); // Will print {a:1, b:'world'}
 
 })
+
+import {Buffer} from "buffer";
+global.Buffer = Buffer;
+import {ApolloServerBase,gql } from "apollo-server-core";
+// The GraphQL schema
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
+
+
+const query = gql`
+  query {
+    hello
+  }
+`
+
+// A map of functions which return data for the schema.
+const resolvers = {
+  Query: {
+    hello: () => 'world',
+  },
+};
+
+const server = new ApolloServerBase({
+  typeDefs,
+  resolvers,
+});
+
+
+server.executeOperation({
+  query: query
+}).then(res => {
+  console.log(res.data);
+})
+
+
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
