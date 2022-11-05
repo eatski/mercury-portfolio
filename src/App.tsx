@@ -1,34 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import { Suspense, useState } from 'react'
+import {InMemoryCache} from "@apollo/client"
 import './App.css'
+import { server } from './server'
+import {gql} from "@apollo/client"
+
+const cache = new InMemoryCache();
+
+const fetchQuery = (query: string)  => {
+  const queryNode = gql(query);
+  const result = cache.readQuery({
+    query: queryNode
+  })
+  console.log("readQuery",result)
+  if(!result){
+    throw server.executeOperation({
+      query: queryNode
+    }).then(res => {
+      console.log("result",res.data);
+      cache.writeQuery({
+        query: queryNode,
+        data: res.data
+      })
+      return res.data;
+    })
+  }
+  return result;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [query, setQuery] = useState(`query { hello, __typename }`);
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+      <h1>My Profile</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <textarea value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)}>
+        </textarea>
+        <Suspense fallback={null}>
+          <Result query={query}/>
+        </Suspense>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
     </div>
   )
+}
+
+const Result: React.FC<{query: string}> = ({query}) => {
+  return  <div>
+      {JSON.stringify(fetchQuery(query))}
+    </div>
 }
 
 export default App

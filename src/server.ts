@@ -10,13 +10,6 @@ const typeDefs = gql`
   }
 `;
 
-
-const query = gql`
-  query {
-    hello
-  }
-`
-
 // A map of functions which return data for the schema.
 const resolvers = {
   Query: {
@@ -36,10 +29,3 @@ export const server = new ApolloServerBase({
   typeDefs,
   resolvers,
 });
-
-
-server.executeOperation({
-  query: query
-}).then(res => {
-  console.log(res.data);
-})
