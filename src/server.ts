@@ -1,5 +1,5 @@
 import {ApolloServerBase,gql } from "apollo-server-core";
-import { dbPromise } from "./db";
+import { dbClient } from "./db";
 // The GraphQL schema
 const typeDefs = gql`
   type Proficiency {
@@ -43,44 +43,28 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     hello: async () => {
-        const db = await dbPromise;
-          // Prepare an sql statement
-        const stmt = db.prepare("SELECT * FROM hello WHERE a=:aval AND b=:bval");
-
-        // Bind values to the parameters and fetch the results of the query
-        const result = stmt.getAsObject({':aval' : 1, ':bval' : 'world'});
+        const result = await dbClient.findOne("SELECT * FROM hello WHERE a =:a", { ":a": 1 });
         return result.b
     },
     profile: async () => {
-        const db = await dbPromise;
-        const stmt = db.prepare("SELECT * FROM profile WHERE id=:id");
-        const result = stmt.getAsObject({':id' : 0});
-        return result
+        return dbClient.findOne("SELECT * FROM profile WHERE id=:id", {':id' : 0})
     }
   },
   Profile: {
     skill: async (parent: any) => {
-        const db = await dbPromise;
-        console.log("profile", parent)
-        const stmt = db.prepare("SELECT * FROM language_profile WHERE profile_id=:id");
-        const result = stmt.getAsObject({':id' : parent.id});
-        stmt.free();
-        console.log("language_id", result)
+        const result = await dbClient.findMany("SELECT * FROM language_profile WHERE profile_id=:id", {':id' : parent.id})
         return {
-          languages: [{
+          languages: result.map(item => ({
             language: {
-              id: result.language_id
+              id: item.language_id,
             }
-          }]
+          }))
         }
     },
   },
   Language: {
     name: async (parent: any) => {
-        const db = await dbPromise;
-        console.log(parent);
-        const stmt = db.prepare("SELECT * FROM language WHERE id=:id");
-        const result = stmt.getAsObject({':id' : parent.id});
+        const result = await dbClient.findOne("SELECT * FROM language WHERE id=:id", {':id' : parent.id})
         return result.name
     }
   }

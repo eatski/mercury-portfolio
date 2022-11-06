@@ -24,7 +24,6 @@ const useQuery = (query: string,set: Set<string>)  => {
   const result = cache.readQuery({
     query: queryNode
   });
-  console.log("readQuery",result)
   if(!result){
     if(set.has(query)){
       return null
@@ -33,7 +32,6 @@ const useQuery = (query: string,set: Set<string>)  => {
       throw server.executeOperation({
         query: queryNode
       }).then(res => {
-        console.log("result",res.data);
         if(res.data){
           cache.writeQuery({
             query: queryNode,
@@ -94,8 +92,6 @@ const MemorizedResult: React.FC<{query: string}> = ({query}) => {
 }
 
 const Result: React.FC<{query: string,set: Set<string>}> = ({query,set}) => {
-  
-
   return  <div>
       {JSON.stringify(useQuery(query,set))}
     </div>
