@@ -1,50 +1,19 @@
 import {ApolloServerBase,gql } from "apollo-server-core";
+import { Resolvers } from "./codegen/resolvers";
 import { dbClient } from "./db";
+import schema from "./schema.graphql?raw"
+
 // The GraphQL schema
-const typeDefs = gql`
-  type Proficiency {
-    id: ID!
-    description: String!
-    emoji: String!
-  }
-  type Language {
-    id: ID!,
-    name: String!
-  }
-  type Library {
-    id: ID!,
-    name: String!
-  }
-  type Skill {
-    id: ID!,
-    languages: [AcquiredLanguage!]!,
-    libraries: [AcquiredLibrary!]!
-  }
-  type AcquiredLanguage {
-    language: Language!,
-    proficiency: Proficiency!
-  }
-  type AcquiredLibrary {
-    library: Library!,
-    proficiency: Proficiency!
-  }
-  type Profile {
-    id: ID!,
-    name: String!,
-    skill: Skill!
-  }
-  type Query {
-    hello: String!,
-    profile: Profile!
-  }
-`;
+const typeDefs = gql(schema);
+
+const neverUsedValue = () => null as never
 
 // A map of functions which return data for the schema.
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
     hello: async () => {
         const result = await dbClient.findOne("SELECT * FROM hello WHERE a =:a", { ":a": 1 });
-        return result.b
+        return result.b;
     },
     profile: async () => {
         return dbClient.findOne("SELECT * FROM profile WHERE id=:id", {':id' : 0})
@@ -57,8 +26,15 @@ const resolvers = {
           languages: result.map(item => ({
             language: {
               id: item.language_id,
+              name: neverUsedValue()
+            },
+            proficiency: {
+              id: item.proficiency_id,
+              description: neverUsedValue(),
+              emoji: neverUsedValue()
             }
-          }))
+          })),
+          libraries: [],
         }
     },
   },

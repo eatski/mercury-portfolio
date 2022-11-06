@@ -27,7 +27,7 @@ const dbPromise = initSqlJs({ locateFile: () => new URL(sqlWasm, import.meta.url
 })
 
 export const dbClient = {
-  findOne: async (query: string, params: any) => {
+  findOne: async (query: string, params: any): Promise<any> => {
     const db = await dbPromise;
     const stmt = db.prepare(query);
     const result = stmt.getAsObject(params);
@@ -37,7 +37,7 @@ export const dbClient = {
     console.log("result", result);
     return result
   },
-  findMany: async (query: string, params: any) => {
+  findMany: async (query: string, params: any): Promise<any[]> => {
     const db = await dbPromise;
     const stmt = db.prepare(query);
     stmt.bind(params);

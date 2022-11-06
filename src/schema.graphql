@@ -1,0 +1,34 @@
+ type Proficiency {
+    id: ID!
+    description: String!
+    emoji: String!
+}
+  type Language {
+    id: ID!,
+    name: String!
+  }
+  type Library {
+    id: ID!,
+    name: String!
+  }
+  type Skill {
+    languages: [AcquiredLanguage!]!,
+    libraries: [AcquiredLibrary!]!
+  }
+  type AcquiredLanguage {
+    language: Language!,
+    proficiency: Proficiency!
+  }
+  type AcquiredLibrary {
+    library: Library!,
+    proficiency: Proficiency!
+  }
+  type Profile {
+    id: ID!,
+    name: String!,
+    skill: Skill!
+  }
+  type Query {
+    hello: String!,
+    profile: Profile!
+  }
