@@ -11,13 +11,12 @@ const tryParseQuery = (query: string) => {
   try {
     return gql(query);
   } catch (e) {
+    console.log(e)
     return null;
   }
 }
 
-const useQuery = (query: string)  => {
-  //HACk
-  const ref = useRef(new Set<string>());
+const useQuery = (query: string,set: Set<string>)  => {
   const queryNode = tryParseQuery(query);
   if(!queryNode) {
     return null
@@ -27,19 +26,21 @@ const useQuery = (query: string)  => {
   });
   console.log("readQuery",result)
   if(!result){
-    if(ref.current.has(query)){
+    if(set.has(query)){
       return null
     } else {
-      ref.current.add(query)
+      set.add(query)
       throw server.executeOperation({
         query: queryNode
       }).then(res => {
         console.log("result",res.data);
         if(res.data){
-          res.data && cache.writeQuery({
+          cache.writeQuery({
             query: queryNode,
             data: res.data
           })
+        } else {
+          console.log(res.errors)
         }
       })
     }
@@ -48,9 +49,27 @@ const useQuery = (query: string)  => {
   return result;
 }
 
+const FIRST_QUERY = `#graphql
+query { 
+  __typename, 
+  hello, 
+  profile { 
+    name
+    skill {
+        languages {
+          language {
+            id
+            name
+          }
+        }
+    }
+  } 
+}
+`
+
 function App() {
 
-  const [query, setQuery] = useState(`query { hello, __typename }`);
+  const [query, setQuery] = useState(FIRST_QUERY);
 
   return (
     <div className="App">
@@ -68,16 +87,17 @@ function App() {
 }
 
 const MemorizedResult: React.FC<{query: string}> = ({query}) => {
+  const ref = useRef(new Set<string>());
   return <Suspense fallback={null}>
-    <Result query={query}/>
+    <Result query={query} set={ref.current}/>
   </Suspense>
 }
 
-const Result: React.FC<{query: string}> = ({query}) => {
+const Result: React.FC<{query: string,set: Set<string>}> = ({query,set}) => {
   
 
   return  <div>
-      {JSON.stringify(useQuery(query))}
+      {JSON.stringify(useQuery(query,set))}
     </div>
 }
 
