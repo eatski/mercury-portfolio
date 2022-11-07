@@ -1,6 +1,7 @@
 import {ApolloServerBase,gql } from "apollo-server-core";
 import { Resolvers } from "./codegen/resolvers";
 import { builder } from "./kysely";
+import { Loader } from "./loader";
 import schema from "./schema.graphql?raw"
 
 // The GraphQL schema
@@ -9,7 +10,7 @@ const typeDefs = gql(schema);
 const neverUsedValue = () => null as never
 
 // A map of functions which return data for the schema.
-const resolvers: Resolvers = {
+const resolvers: Resolvers<Context> = {
   Query: {
     hello: async () => {
         const [result] = await builder.selectFrom("hello").select("b").execute();
@@ -32,6 +33,7 @@ const resolvers: Resolvers = {
           .select("proficiency_id")
           .where("profile_id","=",parseInt(parent.id))
           .execute();
+        console.log("slill",result);
         return {
           languages: result.map(item => ({
             language: {
@@ -49,14 +51,26 @@ const resolvers: Resolvers = {
     },
   },
   Language: {
-    name: async (parent) => {
-        const [result] = await builder.selectFrom("language").select("name").where("id", "=", parseInt(parent.id)).execute();
-        return result.name
+    name: async (parent,_,{languageLoader}) => {
+        const name = await languageLoader.load(parseInt(parent.id));
+        return name
     },
   }
 };
 
-export const server = new ApolloServerBase({
+type Context = {
+  languageLoader: Loader<number,Record<number,string>>
+}
+
+export const server = new ApolloServerBase<Context>({
   typeDefs,
   resolvers,
+  context: () => {
+    return {
+      languageLoader: new Loader<number,Record<number,string>>(async (keys) => {
+        const result = await builder.selectFrom("language").select("id").select("name").where("id", "in",keys).execute();
+        return Object.fromEntries(result.map(item => [item.id, item.name]))
+      })
+    }
+  }
 });

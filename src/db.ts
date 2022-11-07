@@ -1,7 +1,5 @@
 import initSqlJs from "sql.js";
 import sqlWasm from "sql.js/dist/sql-wasm.wasm?url";
-import {SelectQueryBuilder,Selection} from "kysely"
-
 
 const initSql = `
 CREATE TABLE hello (a int, b char);
@@ -11,6 +9,7 @@ CREATE TABLE profile (id int, name char);
 INSERT INTO profile VALUES (0, 'eatski');
 CREATE TABLE language_profile (language_id int, profile_id int , proficiency_id int);
 INSERT INTO language_profile VALUES (0, 0, 0);
+INSERT INTO language_profile VALUES (1, 0, 0);
 CREATE TABLE language (id int, name char);
 INSERT INTO language VALUES (0, 'TypeScript');
 INSERT INTO language VALUES (1, 'Rust');

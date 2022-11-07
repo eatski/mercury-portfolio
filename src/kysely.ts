@@ -40,12 +40,14 @@ export const builder = new Kysely<Database>({
                 const db = await dbPromise;
                 const connection: DatabaseConnection = {
                     executeQuery: function <R>(compiledQuery: CompiledQuery): Promise<QueryResult<R>> {
-                        const rows = db.exec(compiledQuery.sql,compiledQuery.parameters as any)
+                        console.log(compiledQuery.sql,compiledQuery.parameters);
+                        const [result] = db.exec(compiledQuery.sql,compiledQuery.parameters as any)
+                        console.log(result);
                         return Promise.resolve({
-                            rows: rows.map(e => {
+                            rows: result.values.map(value => {
                                 const row : Record<string,unknown>= {};
-                                e.columns.forEach((c,i) => {
-                                    row[c] = e.values[0][i]
+                                result.columns.forEach((c,i) => {
+                                    row[c] = value[i]
                                 })
                                 return row
                             }) as any
