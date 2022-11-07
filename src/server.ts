@@ -33,7 +33,6 @@ const resolvers: Resolvers<Context> = {
           .select("proficiency_id")
           .where("profile_id","=",parseInt(parent.id))
           .execute();
-        console.log("slill",result);
         return {
           languages: result.map(item => ({
             language: {

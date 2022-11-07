@@ -42,7 +42,6 @@ export const builder = new Kysely<Database>({
                     executeQuery: function <R>(compiledQuery: CompiledQuery): Promise<QueryResult<R>> {
                         console.log(compiledQuery.sql,compiledQuery.parameters);
                         const [result] = db.exec(compiledQuery.sql,compiledQuery.parameters as any)
-                        console.log(result);
                         return Promise.resolve({
                             rows: result.values.map(value => {
                                 const row : Record<string,unknown>= {};
