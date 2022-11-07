@@ -1,5 +1,8 @@
 import initSqlJs from "sql.js";
 import sqlWasm from "sql.js/dist/sql-wasm.wasm?url";
+import {SelectQueryBuilder,Selection} from "kysely"
+
+
 const initSql = `
 CREATE TABLE hello (a int, b char);
 INSERT INTO hello VALUES (0, 'hello');
@@ -20,35 +23,8 @@ INSERT INTO proficiency VALUES (1, 'fun', '💓');
 INSERT INTO proficiency VALUES (2, 'expert', '🤓');
 `
 
-const dbPromise = initSqlJs({ locateFile: () => new URL(sqlWasm, import.meta.url).href }).then(SQL => {
+export const dbPromise = initSqlJs({ locateFile: () => new URL(sqlWasm, import.meta.url).href }).then(SQL => {
   const db = new SQL.Database();
   db.run(initSql); // Run the query without returning anything
   return db
 })
-
-export const dbClient = {
-  findOne: async (query: string, params: any): Promise<any> => {
-    const db = await dbPromise;
-    const stmt = db.prepare(query);
-    const result = stmt.getAsObject(params);
-    stmt.free();
-    console.log("query", query);
-    console.log("values", params);
-    console.log("result", result);
-    return result
-  },
-  findMany: async (query: string, params: any): Promise<any[]> => {
-    const db = await dbPromise;
-    const stmt = db.prepare(query);
-    stmt.bind(params);
-    const result = [];
-    while (stmt.step()) {
-      result.push(stmt.getAsObject());
-    }
-    stmt.free();
-    console.log("query", query);
-    console.log("values", params);
-    console.log("result", result);
-    return result
-  }
-}

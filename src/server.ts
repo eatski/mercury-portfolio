@@ -1,6 +1,6 @@
 import {ApolloServerBase,gql } from "apollo-server-core";
 import { Resolvers } from "./codegen/resolvers";
-import { dbClient } from "./db";
+import { builder } from "./kysely";
 import schema from "./schema.graphql?raw"
 
 // The GraphQL schema
@@ -12,24 +12,34 @@ const neverUsedValue = () => null as never
 const resolvers: Resolvers = {
   Query: {
     hello: async () => {
-        const result = await dbClient.findOne("SELECT * FROM hello WHERE a =:a", { ":a": 1 });
+        const [result] = await builder.selectFrom("hello").select("b").execute();
         return result.b;
     },
     profile: async () => {
-        return dbClient.findOne("SELECT * FROM profile WHERE id=:id", {':id' : 0})
+      const [result] = await builder.selectFrom("profile").select("id").select("name").execute();
+      return {
+        id: result.id.toString(),
+        name: result.name,
+        skill: neverUsedValue(),
+      }
     }
   },
   Profile: {
-    skill: async (parent: any) => {
-        const result = await dbClient.findMany("SELECT * FROM language_profile WHERE profile_id=:id", {':id' : parent.id})
+    skill: async (parent) => {
+        const result = await builder
+          .selectFrom("language_profile")
+          .select("language_id")
+          .select("proficiency_id")
+          .where("profile_id","=",parseInt(parent.id))
+          .execute();
         return {
           languages: result.map(item => ({
             language: {
-              id: item.language_id,
+              id: item.language_id.toString(),
               name: neverUsedValue()
             },
             proficiency: {
-              id: item.proficiency_id,
+              id: item.proficiency_id.toString(),
               description: neverUsedValue(),
               emoji: neverUsedValue()
             }
@@ -39,10 +49,10 @@ const resolvers: Resolvers = {
     },
   },
   Language: {
-    name: async (parent: any) => {
-        const result = await dbClient.findOne("SELECT * FROM language WHERE id=:id", {':id' : parent.id})
+    name: async (parent) => {
+        const [result] = await builder.selectFrom("language").select("name").where("id", "=", parseInt(parent.id)).execute();
         return result.name
-    }
+    },
   }
 };
 
