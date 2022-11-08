@@ -1,6 +1,5 @@
 import { Suspense, useRef, useState } from 'react'
 import {InMemoryCache} from "@apollo/client"
-import './App.css'
 import { server } from './server'
 import {gql} from "@apollo/client"
 import React from 'react'
