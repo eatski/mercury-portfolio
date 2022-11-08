@@ -1,50 +1,7 @@
 import { Suspense, useRef, useState } from 'react'
-import {InMemoryCache} from "@apollo/client"
-import { server } from './server'
-import {gql} from "@apollo/client"
 import React from 'react'
-
-const cache = new InMemoryCache();
-
-const tryParseQuery = (query: string) => {
-  try {
-    return gql(query);
-  } catch (e) {
-    console.log(e)
-    return null;
-  }
-}
-
-const useQuery = (query: string,set: Set<string>)  => {
-  const queryNode = tryParseQuery(query);
-  if(!queryNode) {
-    return null
-  }
-  const result = cache.readQuery({
-    query: queryNode
-  });
-  if(!result){
-    if(set.has(query)){
-      return null
-    } else {
-      set.add(query)
-      throw server.executeOperation({
-        query: queryNode
-      }).then(res => {
-        if(res.data){
-          cache.writeQuery({
-            query: queryNode,
-            data: res.data
-          })
-        } else {
-          console.log(res.errors)
-        }
-      })
-    }
-   
-  }
-  return result;
-}
+import {app, json, main, textarea} from "./App.css"
+import { useQuery } from './useQuery';
 
 const FIRST_QUERY = `#graphql
 query { 
@@ -69,10 +26,10 @@ function App() {
   const [query, setQuery] = useState(FIRST_QUERY);
 
   return (
-    <div className="App">
+    <div className={app}>
       <h1>My Profile</h1>
-      <div className="card">
-        <textarea className='textarea' value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)}>
+      <div className={main}>
+        <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)}>
         </textarea>
         <MemorizedResult query={query}/>
       </div>
@@ -91,7 +48,7 @@ const MemorizedResult: React.FC<{query: string}> = ({query}) => {
 }
 
 const Result: React.FC<{query: string,set: Set<string>}> = ({query,set}) => {
-  return  <div>
+  return  <div className={json}>
       {JSON.stringify(useQuery(query,set))}
     </div>
 }
