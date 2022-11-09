@@ -1,7 +1,7 @@
-import { Suspense, useRef, useState } from 'react'
+import { Suspense, useState } from 'react'
 import React from 'react'
 import {app, json, main, textarea} from "./App.css"
-import { useQuery } from './useQuery';
+import { GraphQLClient } from './client';
 
 const FIRST_QUERY = `#graphql
 query { 
@@ -20,6 +20,8 @@ query {
   } 
 }
 `
+
+const client = new GraphQLClient()
 
 function App() {
 
@@ -40,14 +42,18 @@ function App() {
 }
 
 const MemorizedResult: React.FC<{query: string}> = ({query}) => {
-  const ref = useRef(new Set<string>());
   return <Suspense fallback={null}>
-    <Result query={query} set={ref.current}/>
+    <Result query={query}/>
   </Suspense>
 }
 
-const Result: React.FC<{query: string,set: Set<string>}> = ({query,set}) => {
-  return  <pre className={json}>{JSON.stringify(useQuery(query,set), null, "\t")}</pre>
+const Result: React.FC<{query: string}> = ({query}) => {
+  const result = client.loadQuery(query);
+  if(result.result){
+    return  <pre className={json}>{JSON.stringify(result.data, null, "\t")}</pre>
+  } else {
+    return <pre className={json}>{JSON.stringify(result.error, null, "\t")}</pre>
+  }
 }
 
 export default App
