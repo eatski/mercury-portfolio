@@ -29,8 +29,7 @@ function App() {
     <div className={app}>
       <h1>My Profile</h1>
       <div className={main}>
-        <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)}>
-        </textarea>
+        <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)} />
         <MemorizedResult query={query}/>
       </div>
       <p className="read-the-docs">
@@ -48,9 +47,7 @@ const MemorizedResult: React.FC<{query: string}> = ({query}) => {
 }
 
 const Result: React.FC<{query: string,set: Set<string>}> = ({query,set}) => {
-  return  <div className={json}>
-      {JSON.stringify(useQuery(query,set))}
-    </div>
+  return  <pre className={json}>{JSON.stringify(useQuery(query,set), null, "\t")}</pre>
 }
 
 export default App
