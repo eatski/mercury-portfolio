@@ -2,10 +2,6 @@ import {Kysely,SqliteAdapter,SqliteIntrospector,SqliteQueryCompiler,DummyDriver,
 import { dbPromise } from "./db"
 
 interface Database {
-    hello: {
-        a: number
-        b: string
-    },
     profile: {
         id: number,
         name: string,

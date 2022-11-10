@@ -2,9 +2,6 @@ import initSqlJs from "sql.js";
 import sqlWasm from "sql.js/dist/sql-wasm.wasm?url";
 
 const initSql = `
-CREATE TABLE hello (a int, b char);
-INSERT INTO hello VALUES (0, 'hello');
-INSERT INTO hello VALUES (1, 'world');
 CREATE TABLE profile (id int, name char);
 INSERT INTO profile VALUES (0, 'eatski');
 CREATE TABLE language_profile (language_id int, profile_id int , proficiency_id int);

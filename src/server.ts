@@ -13,8 +13,7 @@ const neverUsedValue = () => null as never
 const resolvers: Resolvers<Context> = {
   Query: {
     hello: async () => {
-        const [result] = await builder.selectFrom("hello").select("b").execute();
-        return result.b;
+        return "This site is a browser-complete GraphQL demo page.";
     },
     profile: async () => {
       const [result] = await builder.selectFrom("profile").select("id").select("name").execute();
