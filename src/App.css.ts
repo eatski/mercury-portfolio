@@ -22,12 +22,16 @@ export const textarea = style({
     padding: "12px",
 })
 
+export const jsonContainer = style({
+    width: "440px",
+    border: "1px solid #022C43",
+})
+
 export const json = style({
     width: "440px",
     fontSize: "14px",
     padding: "12px",
     margin: 0,
-    border: "1px solid #022C43",
     whiteSpace: "pre-wrap",
 })
 

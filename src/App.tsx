@@ -1,6 +1,6 @@
 import { Suspense, useState } from 'react'
 import React from 'react'
-import {app, buttons, json, main, switzh, textarea} from "./App.css"
+import {app, buttons, json, jsonContainer, main, switzh, textarea} from "./App.css"
 import { GraphQLClient } from './client';
 
 const client = new GraphQLClient()
@@ -15,7 +15,7 @@ function App() {
       <div className={main}>
         <Buttons onClick={setQuery} />
         <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)} />
-        <MemorizedResult query={query}/>
+        <ResultContainer query={query}/>
       </div>
       <p className="read-the-docs">
         Write query to fetch my profile!!
@@ -66,10 +66,12 @@ const Buttons: React.FC<{onClick: (query: string) => void}> = ({onClick}) => {
   </div>
 }
 
-const MemorizedResult: React.FC<{query: string}> = ({query}) => {
-  return <Suspense fallback={null}>
-    <Result query={query}/>
-  </Suspense>
+const ResultContainer: React.FC<{query: string}> = ({query}) => {
+  return <div className={jsonContainer}>
+    <Suspense fallback={null}>
+      <Result query={query}/>
+    </Suspense>
+  </div>
 }
 
 const Result: React.FC<{query: string}> = ({query}) => {
