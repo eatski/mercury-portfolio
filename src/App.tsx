@@ -1,28 +1,7 @@
 import { Suspense, useState } from 'react'
 import React from 'react'
-import {app, json, main, textarea} from "./App.css"
+import {app, buttons, json, main, switzh, textarea} from "./App.css"
 import { GraphQLClient } from './client';
-
-const FIRST_QUERY = `#graphql
-query { 
-  __typename, 
-  hello, 
-  profile { 
-    name
-    skill {
-        languages {
-          language {
-            name
-          }
-          proficiency {
-            description
-            emoji
-          }
-        }
-    }
-  } 
-}
-`
 
 const client = new GraphQLClient()
 
@@ -34,6 +13,7 @@ function App() {
     <div className={app}>
       <h1>My Profile</h1>
       <div className={main}>
+        <Buttons onClick={setQuery} />
         <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)} />
         <MemorizedResult query={query}/>
       </div>
@@ -42,6 +22,48 @@ function App() {
       </p>
     </div>
   )
+}
+
+
+const FIRST_QUERY = `#graphql
+query { 
+  hello, 
+  profile { 
+    name
+  } 
+}
+`
+
+const SECOND_QUERY = `#graphql
+query { 
+  profile { 
+    skill {
+        languages {
+          language {
+            name
+          }
+          proficiency {
+            emoji
+          }
+        }
+    }
+  } 
+}
+`
+
+const THIRD_QUERY = `#graphql
+query {
+
+}
+`
+
+
+const Buttons: React.FC<{onClick: (query: string) => void}> = ({onClick}) => {
+  return <div className={buttons}>
+    <button className={switzh} onClick={() => onClick(FIRST_QUERY)}>Button 1</button>
+    <button className={switzh} onClick={() => onClick(SECOND_QUERY)}>Button 2</button>
+    <button className={switzh} onClick={() => onClick(THIRD_QUERY)}>Button 3</button>
+  </div>
 }
 
 const MemorizedResult: React.FC<{query: string}> = ({query}) => {
