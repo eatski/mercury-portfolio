@@ -1,5 +1,5 @@
 import {ApolloServerBase,gql } from "apollo-server-core";
-import { Resolvers } from "./codegen/resolvers";
+import { Resolvers,Proficiency } from "./codegen/resolvers";
 import { builder } from "./kysely";
 import { Loader } from "./loader";
 import schema from "./schema.graphql?raw"
@@ -54,11 +54,22 @@ const resolvers: Resolvers<Context> = {
         const name = await languageLoader.load(parseInt(parent.id));
         return name
     },
+  },
+  Proficiency: {
+    description: async (parent,_,{proficiencyLoader}) => {
+        const {description} = await proficiencyLoader.load(parseInt(parent.id));
+        return description
+    },
+    emoji: async (parent,_,{proficiencyLoader}) => {
+        const {emoji} = await proficiencyLoader.load(parseInt(parent.id));
+        return emoji
+    }
   }
 };
 
 type Context = {
-  languageLoader: Loader<number,Record<number,string>>
+  languageLoader: Loader<number,Record<number,string>>,
+  proficiencyLoader: Loader<number,Record<number,Omit<Proficiency,"id">>>,
 }
 
 export const server = new ApolloServerBase<Context>({
@@ -69,6 +80,10 @@ export const server = new ApolloServerBase<Context>({
       languageLoader: new Loader<number,Record<number,string>>(async (keys) => {
         const result = await builder.selectFrom("language").select("id").select("name").where("id", "in",keys).execute();
         return Object.fromEntries(result.map(item => [item.id, item.name]))
+      }),
+      proficiencyLoader: new Loader<number,Record<number,Omit<Proficiency,"id">>>(async (keys) => {
+        const result = await builder.selectFrom("proficiency").select("id").select("description").select("emoji").where("id", "in",keys).execute();
+        return Object.fromEntries(result.map(item => [item.id, item]))
       })
     }
   }

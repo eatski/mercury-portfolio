@@ -12,8 +12,11 @@ query {
     skill {
         languages {
           language {
-            id
             name
+          }
+          proficiency {
+            description
+            emoji
           }
         }
     }
