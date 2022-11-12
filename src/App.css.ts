@@ -3,16 +3,13 @@ import { style } from '@vanilla-extract/css';
 export const app = style({
     color: "#022C43",
     padding: "12px",
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
 
 })
 
 export const main = style({
     display: "flex",
     gap: "12px",
-    flexGrow: 1,
+    height: "600px",
     justifyContent: "center",
 })
 
@@ -25,6 +22,7 @@ export const textarea = style({
 export const jsonContainer = style({
     width: "440px",
     border: "1px solid #022C43",
+    overflow: "scroll",
 })
 
 export const json = style({
@@ -33,6 +31,7 @@ export const json = style({
     padding: "12px",
     margin: 0,
     whiteSpace: "pre-wrap",
+
 })
 
 export const buttons = style({

@@ -17,9 +17,6 @@ function App() {
         <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)} />
         <ResultContainer query={query}/>
       </div>
-      <p className="read-the-docs">
-        Write query to fetch my profile!!
-      </p>
     </div>
   )
 }
@@ -77,9 +74,9 @@ const ResultContainer: React.FC<{query: string}> = ({query}) => {
 const Result: React.FC<{query: string}> = ({query}) => {
   const result = client.loadQuery(query);
   if(result.result){
-    return  <pre className={json}>{JSON.stringify(result.data, null, "\t")}</pre>
+    return  <pre className={json}>{JSON.stringify(result.data, null, 3)}</pre>
   } else {
-    return <pre className={json}>{JSON.stringify(result.error, null, "\t")}</pre>
+    return <pre className={json}>{JSON.stringify(result.error, null, 3)}</pre>
   }
 }
 

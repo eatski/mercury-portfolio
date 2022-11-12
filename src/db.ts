@@ -7,6 +7,8 @@ INSERT INTO profile VALUES (0, 'eatski');
 CREATE TABLE language_profile (language_id int, profile_id int , proficiency_id int);
 INSERT INTO language_profile VALUES (0, 0, 0);
 INSERT INTO language_profile VALUES (1, 0, 0);
+INSERT INTO language_profile VALUES (2, 0, 0);
+INSERT INTO language_profile VALUES (3, 0, 0);
 CREATE TABLE language (id int, name char);
 INSERT INTO language VALUES (0, 'TypeScript');
 INSERT INTO language VALUES (1, 'Rust');
