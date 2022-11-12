@@ -39,7 +39,7 @@ export const buttons = style({
     display: "flex",
     gap: "8px",
     flexDirection: "column",
-    width: "120px",
+    width: "200px",
 })
 
 export const switzh = style({
