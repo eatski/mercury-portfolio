@@ -33,7 +33,9 @@ const resolvers: Resolvers<Context> = {
           .where("profile_id","=",parseInt(parent.id))
           .execute();
         return {
+          id: parent.id,
           languages: result.map(item => ({
+            id: `${item.language_id}`,
             language: {
               id: item.language_id.toString(),
               name: neverUsedValue()

@@ -12,14 +12,17 @@
     name: String!
   }
   type Skill {
+    id: ID!,
     languages: [AcquiredLanguage!]!,
     libraries: [AcquiredLibrary!]!
   }
   type AcquiredLanguage {
+    id: ID!,
     language: Language!,
     proficiency: Proficiency!
   }
   type AcquiredLibrary {
+    id: ID!,
     library: Library!,
     proficiency: Proficiency!
   }
