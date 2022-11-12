@@ -52,7 +52,13 @@ function App() {
 
 const FIRST_QUERY = `#graphql
 query { 
-  hello, 
+  site {
+    description
+    repositoryURL
+    technologyStacks {
+      name
+    }
+  } 
   profile { 
     id
     name
@@ -80,15 +86,27 @@ query {
 
 const THIRD_QUERY = `#graphql
 query {
-
+  profile { 
+    id
+    skill {
+      technologies {
+        technology {
+          name
+        }
+        proficiency {
+            emoji
+          }
+      }
+    }
+  }
 }
 `
 
 const Buttons: React.FC<{onClick: (query: string) => void}> = ({onClick}) => {
   return <div className={buttons}>
-    <button className={switzh} onClick={() => onClick(FIRST_QUERY)}>Button 1</button>
-    <button className={switzh} onClick={() => onClick(SECOND_QUERY)}>Button 2</button>
-    <button className={switzh} onClick={() => onClick(THIRD_QUERY)}>Button 3</button>
+    <button className={switzh} onClick={() => onClick(FIRST_QUERY)}>About</button>
+    <button className={switzh} onClick={() => onClick(SECOND_QUERY)}>Skill 1</button>
+    <button className={switzh} onClick={() => onClick(THIRD_QUERY)}>Skill 2</button>
   </div>
 }
 

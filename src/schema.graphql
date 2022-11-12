@@ -7,23 +7,23 @@
     id: ID!,
     name: String!
   }
-  type Library {
+  type Technology {
     id: ID!,
     name: String!
   }
   type Skill {
     id: ID!,
     languages: [AcquiredLanguage!]!,
-    libraries: [AcquiredLibrary!]!
+    technologies: [AcquiredTechnology!]!
   }
   type AcquiredLanguage {
     id: ID!,
     language: Language!,
     proficiency: Proficiency!
   }
-  type AcquiredLibrary {
+  type AcquiredTechnology {
     id: ID!,
-    library: Library!,
+    technology: Technology!,
     proficiency: Proficiency!
   }
   type Profile {
@@ -32,6 +32,12 @@
     skill: Skill!
   }
   type Query {
-    hello: String!,
+    site: Site!,
     profile: Profile!
+  }
+  type Site {
+    id: ID!,
+    description: String!,
+    repositoryURL: String!
+    technologyStacks: [Technology!]!
   }

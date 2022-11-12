@@ -20,6 +20,19 @@ interface Database {
         description: string,
         emoji: string
     },
+    technology: {
+        id: number,
+        name: string,
+    },
+    technology_profile: {
+        technology_id: number,
+        profile_id: number,
+        proficiency_id: number,
+    },
+    technology_site: {
+        technology_id: number,
+        site_id: number,
+    }
 }
 
 export const builder = new Kysely<Database>({

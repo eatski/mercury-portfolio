@@ -1,5 +1,5 @@
 import {ApolloServerBase,gql } from "apollo-server-core";
-import { Resolvers,Proficiency } from "./codegen/resolvers";
+import { Resolvers,Proficiency, Technology } from "./codegen/resolvers";
 import { builder } from "./kysely";
 import { Loader } from "./loader";
 import schema from "./schema.graphql?raw"
@@ -12,8 +12,13 @@ const neverUsedValue = () => null as never
 // A map of functions which return data for the schema.
 const resolvers: Resolvers<Context> = {
   Query: {
-    hello: async () => {
-        return "This site is a browser-complete GraphQL demo page.";
+    site: () => {
+      return {
+        id: "profile-graphql-sqlite",
+        description: "a browser-complete GraphQL demo page",
+        repositoryURL: "https://github.com/eatski/profile-graphql-sqlite",
+        technologyStacks: neverUsedValue()
+      }
     },
     profile: async () => {
       const [result] = await builder.selectFrom("profile").select("id").select("name").execute();
@@ -46,7 +51,7 @@ const resolvers: Resolvers<Context> = {
               emoji: neverUsedValue()
             }
           })),
-          libraries: [],
+          technologies: neverUsedValue(),
         }
     },
   },
@@ -54,6 +59,37 @@ const resolvers: Resolvers<Context> = {
     name: async (parent,_,{languageLoader}) => {
         const name = await languageLoader.load(parseInt(parent.id));
         return name
+    },
+  },
+  Site: {
+    technologyStacks: async () => {
+      const result = await builder.selectFrom("technology_site").select("technology_id").select("technology_id").execute();
+      return result.map(item => ({
+        id: item.technology_id.toString(),
+        name: neverUsedValue()
+      }))
+    }
+  },
+  Skill: {
+    technologies: async (parent) => {
+      const result = await builder
+        .selectFrom("technology_profile")
+        .select("technology_id")
+        .select("proficiency_id")
+        .where("profile_id","=",parseInt(parent.id))
+        .execute();
+      return result.map(item => ({
+        id: `${item.technology_id}`,
+        technology: {
+          id: item.technology_id.toString(),
+          name: neverUsedValue()
+        },
+        proficiency: {
+          id: item.proficiency_id.toString(),
+          description: neverUsedValue(),
+          emoji: neverUsedValue()
+        }
+      }))
     },
   },
   Proficiency: {
@@ -65,12 +101,19 @@ const resolvers: Resolvers<Context> = {
         const {emoji} = await proficiencyLoader.load(parseInt(parent.id));
         return emoji
     }
+  },
+  Technology: {
+    name: async (parent,_,{technologyLoader}) => {
+        const {name} = await technologyLoader.load(parseInt(parent.id));
+        return name
+    }
   }
 };
 
 type Context = {
   languageLoader: Loader<number,Record<number,string>>,
   proficiencyLoader: Loader<number,Record<number,Omit<Proficiency,"id">>>,
+  technologyLoader: Loader<number,Record<number,Omit<Technology,"id">>>,
 }
 
 export const server = new ApolloServerBase<Context>({
@@ -84,6 +127,10 @@ export const server = new ApolloServerBase<Context>({
       }),
       proficiencyLoader: new Loader<number,Record<number,Omit<Proficiency,"id">>>(async (keys) => {
         const result = await builder.selectFrom("proficiency").select("id").select("description").select("emoji").where("id", "in",keys).execute();
+        return Object.fromEntries(result.map(item => [item.id, item]))
+      }),
+      technologyLoader: new Loader<number,Record<number,Omit<Technology,"id">>>(async (keys) => {
+        const result = await builder.selectFrom("technology").select("id").select("name").where("id", "in",keys).execute();
         return Object.fromEntries(result.map(item => [item.id, item]))
       })
     }
