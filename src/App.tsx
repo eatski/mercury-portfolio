@@ -1,15 +1,16 @@
 import { Suspense, useState } from 'react'
 import React from 'react'
 import {app, buttons, json, jsonContainer, main, switzh, textarea} from "./App.css"
-import { GraphQLClient } from './client';
-
-const client = new GraphQLClient()
+import {Provider,useQuery} from "urql"
+import {client} from "./urql"
+import {parse,DocumentNode} from "graphql"
 
 function App() {
 
   const [query, setQuery] = useState(FIRST_QUERY);
 
   return (
+    <Provider value={client}>
     <div className={app}>
       <h1>My Profile</h1>
       <div className={main}>
@@ -18,6 +19,7 @@ function App() {
         <ResultContainer query={query}/>
       </div>
     </div>
+    </Provider>
   )
 }
 
@@ -63,20 +65,43 @@ const Buttons: React.FC<{onClick: (query: string) => void}> = ({onClick}) => {
   </div>
 }
 
+type ParseResult = {
+  query: null,
+  error: unknown
+} | {
+  query: DocumentNode
+}
 const ResultContainer: React.FC<{query: string}> = ({query}) => {
+  const parsed : ParseResult= (() => {
+    try {
+      return {
+        query:parse(query)
+      }
+    } catch (error) {
+      return {
+        query: null,
+        error
+      }
+    }
+  })();
+
   return <div className={jsonContainer}>
-    <Suspense fallback={"loading"}>
-      <Result query={query}/>
-    </Suspense>
+    { parsed.query ? 
+      <Suspense fallback={"loading"}>
+        <Result query={parsed.query}/>
+      </Suspense> : <pre className={json}>{JSON.stringify(parsed.error, null, 3)}</pre>
+    }
   </div>
 }
 
-const Result: React.FC<{query: string}> = ({query}) => {
-  const result = client.loadQuery(query);
-  if(result.result){
-    return  <pre className={json}>{JSON.stringify(result.data, null, 3)}</pre>
+const Result: React.FC<{query: DocumentNode}> = ({query}) => {
+  const [{data,error}] = useQuery({
+    query,
+  });
+  if(error){
+    return  <pre className={json}>{JSON.stringify(error, null, 3)}</pre>
   } else {
-    return <pre className={json}>{JSON.stringify(result.error, null, 3)}</pre>
+    return <pre className={json}>{JSON.stringify(data, null, 3)}</pre>
   }
 }
 
