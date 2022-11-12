@@ -24,6 +24,7 @@ export const jsonContainer = style({
     border: "1px solid #022C43",
     overflow: "scroll",
     padding: "12px",
+    background: "#F5F5F5",
 })
 
 export const json = style({

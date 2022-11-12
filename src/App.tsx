@@ -37,10 +37,10 @@ function App() {
       <div className={main}>
         <Buttons onClick={setQuery} />
         <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)} />
-        <ResultContainer>
+        <ResultContainer label='Apollo Client'>
           {parsed.query ? <ApolloClientQuery query={parsed.query}/> : <JsonStringify data={parsed.error} />}
         </ResultContainer>
-        <ResultContainer>
+        <ResultContainer label='Urql'>
           {parsed.query ? <UrqlQuery query={parsed.query}/> : <JsonStringify data={parsed.error} />}
         </ResultContainer>
       </div>
@@ -96,13 +96,13 @@ const JsonStringify = ({data}: {data: unknown}) => {
   return <pre className={json}>{JSON.stringify(data, null, 3)}</pre>
 }
 
-const ResultContainer: React.FC<PropsWithChildren> = ({children}) => {
-
-  return <div className={jsonContainer}>
+const ResultContainer: React.FC<PropsWithChildren<{label: string}>> = ({children,label}) => {
+  return <section className={jsonContainer}>
+    <h2>{label}</h2>
     <Suspense fallback={"loading"}>
         {children}
      </Suspense>
-  </div>
+  </section>
 }
 const ApolloClientQuery: React.FC<{query: DocumentNode}> = ({query}) => {
   const {data,error} = useQueryByApolloClient({
