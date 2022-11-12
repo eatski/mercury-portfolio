@@ -65,7 +65,7 @@ const Buttons: React.FC<{onClick: (query: string) => void}> = ({onClick}) => {
 
 const ResultContainer: React.FC<{query: string}> = ({query}) => {
   return <div className={jsonContainer}>
-    <Suspense fallback={null}>
+    <Suspense fallback={"loading"}>
       <Result query={query}/>
     </Suspense>
   </div>

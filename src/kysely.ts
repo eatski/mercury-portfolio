@@ -38,15 +38,20 @@ export const builder = new Kysely<Database>({
                     executeQuery: function <R>(compiledQuery: CompiledQuery): Promise<QueryResult<R>> {
                         console.log(compiledQuery.sql,compiledQuery.parameters);
                         const [result] = db.exec(compiledQuery.sql,compiledQuery.parameters as any)
-                        return Promise.resolve({
-                            rows: result.values.map(value => {
-                                const row : Record<string,unknown>= {};
-                                result.columns.forEach((c,i) => {
-                                    row[c] = value[i]
+                        return new Promise((resolve) => {
+                            // dummy timeout to simulate async
+                            setTimeout(() => {
+                                resolve({
+                                    rows: result.values.map(value => {
+                                        const row : Record<string,unknown>= {};
+                                        result.columns.forEach((c,i) => {
+                                            row[c] = value[i]
+                                        })
+                                        return row
+                                    }) as any
                                 })
-                                return row
-                            }) as any
-                        })
+                            }, 100);
+                        });
                     },
                     streamQuery: function <R>(compiledQuery: CompiledQuery, chunkSize?: number | undefined): AsyncIterableIterator<QueryResult<R>> {
                         throw new Error("streamQuery not implemented.")
