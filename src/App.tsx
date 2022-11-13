@@ -98,16 +98,21 @@ query {
 `
 
 const SqlDisplay: React.FC = () => {
-  const [logs,setLogs] = useState<string[]>([]);
+  type Item = {
+    id: number,
+    sql: string,
+  }
+  const [logs,setLogs] = useState<Item[]>([]);
+  const ref = React.useRef<number>(0);
   useEffect(() => {
     return addListener((sql) => {
-      setLogs((logs) => [...logs,sql]);
+      setLogs((logs) => [...logs,{id: ref.current++, sql}]);
     })
   },[setLogs])
   return (
     <section className={logDisplay}>
       <h2>SQL</h2>
-      {logs.map((sql) => <div key={sql}>{sql}</div>)}
+      {logs.map(({id,sql}) => <div key={id}>{sql}</div>)}
     </section>
   )
 }
@@ -125,9 +130,9 @@ const Controll: React.FC<ControllProps> = ({ setQuery,client,setClient }) => {
     <fieldset>
       <legend>Query presets</legend>
       <div className={buttons}>
-        <button className={switzh} onClick={() => setQuery(FIRST_QUERY)}>About</button>
-        <button className={switzh} onClick={() => setQuery(SECOND_QUERY)}>Skill 1</button>
-        <button className={switzh} onClick={() => setQuery(THIRD_QUERY)}>Skill 2</button>
+        <button className={switzh} onClick={() => setQuery(FIRST_QUERY)}>Landing</button>
+        <button className={switzh} onClick={() => setQuery(SECOND_QUERY)}>Profile 1</button>
+        <button className={switzh} onClick={() => setQuery(THIRD_QUERY)}>Profile 2</button>
       </div>
     </fieldset>
     <fieldset>
