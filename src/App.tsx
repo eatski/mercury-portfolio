@@ -125,8 +125,8 @@ const Controll: React.FC<ControllProps> = ({ setQuery,client,setClient,clearCach
     <fieldset>
       <legend>Query presets</legend>
       <div className={buttons}>
-        <button className={switzh} onClick={() => setQuery(FIRST_QUERY)}>Landing</button>
-        <button className={switzh} onClick={() => setQuery(SECOND_QUERY)}>About this</button>
+        <button className={switzh} onClick={() => setQuery(FIRST_QUERY)}>Me</button>
+        <button className={switzh} onClick={() => setQuery(SECOND_QUERY)}>What's this?</button>
         <button className={switzh} onClick={() => setQuery(THIRD_QUERY)}>Skill</button>
       </div>
     </fieldset>

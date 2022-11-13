@@ -14,13 +14,14 @@ export const main = style({
 })
 
 export const textarea = style({
-    width: "260px",
+    width: "240px",
     height: "100%",
     padding: "12px",
 })
 
 export const jsonContainer = style({
-    width: "440px",
+    // width: "480px",
+    flexGrow: 1,
     border: "1px solid #022C43",
     overflow: "scroll",
     padding: "12px",
@@ -46,7 +47,7 @@ export const buttons = style({
 })
 
 export const switzh = style({
-    width: "100px",
+    width: "120px",
 })
 
 export const logDisplay = style({
@@ -55,5 +56,5 @@ export const logDisplay = style({
     padding: "12px",
     background: "#F5F5F5",
     fontSize: "14px",
-    width: "500px"
+    width: "600px"
 })
