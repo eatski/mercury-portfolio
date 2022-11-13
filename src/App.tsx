@@ -12,6 +12,7 @@ function App() {
 
   const [query, setQuery] = useState(FIRST_QUERY);
   const [rmTypename, setRmTypename] = useState(true);
+  const [currentClient, setCurrentClient] = useState<ClientLibrary>("apollo");
   const parsed = (() => {
     try {
       return {
@@ -30,10 +31,11 @@ function App() {
       <div className={app}>
         <h1>My Profile</h1>
         <div className={main}>
-          <Buttons onClick={setQuery} rmTypename={rmTypename} setRmTypename={() => setRmTypename(!rmTypename)} />
+          <Controll client={currentClient} setClient={setCurrentClient} setQuery={setQuery} rmTypename={rmTypename} setRmTypename={() => setRmTypename(!rmTypename)} />
           <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)} />
           <ResultContainer>
-            {parsed.query ? <ApolloClientQuery query={parsed.query} rmTypename={rmTypename} /> : <JsonStringify data={parsed.error} />}
+            {parsed.query ? 
+              (currentClient === "apollo" ? <ApolloClientQuery query={parsed.query} rmTypename={rmTypename} /> : <UrqlQuery query={parsed.query} rmTypename={rmTypename}></UrqlQuery>) : <JsonStringify data={parsed.error} />}
           </ResultContainer>
           <SqlDisplay />
         </div>
@@ -112,15 +114,34 @@ const SqlDisplay: React.FC = () => {
   )
 }
 
-const Buttons: React.FC<{ onClick: (query: string) => void, setRmTypename: () => void,rmTypename: boolean }> = ({ onClick, setRmTypename,rmTypename }) => {
+type ClientLibrary = "urql" | "apollo";
+
+type ControllProps = {
+  setQuery: (query: string) => void;
+  rmTypename: boolean;
+  setRmTypename: () => void;
+  client: ClientLibrary;
+  setClient: (client: ClientLibrary) => void;
+}
+
+const Controll: React.FC<ControllProps> = ({ setQuery, setRmTypename,rmTypename,client,setClient }) => {
   return <div className={buttons}>
-    <button className={switzh} onClick={() => onClick(FIRST_QUERY)}>About</button>
-    <button className={switzh} onClick={() => onClick(SECOND_QUERY)}>Skill 1</button>
-    <button className={switzh} onClick={() => onClick(THIRD_QUERY)}>Skill 2</button>
+    <button className={switzh} onClick={() => setQuery(FIRST_QUERY)}>About</button>
+    <button className={switzh} onClick={() => setQuery(SECOND_QUERY)}>Skill 1</button>
+    <button className={switzh} onClick={() => setQuery(THIRD_QUERY)}>Skill 2</button>
     <label>
       Remove '__typename'
       <input type="checkbox" checked={rmTypename} onChange={setRmTypename}></input>
     </label>
+    <fieldset>
+      <legend>GraphQL Client</legend>
+      <label>
+        <input type="radio" name="client" value="apollo" checked={client === "apollo"} onClick={() => setClient("apollo")}/>apollo
+      </label>
+      <label>
+        <input type="radio" name="client" value="urql" checked={client === "urql"} onClick={() => setClient("urql")}/>urql
+      </label>
+    </fieldset>
   </div>
 }
 
