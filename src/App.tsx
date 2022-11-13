@@ -47,8 +47,17 @@ function App() {
   )
 }
 
-
 const FIRST_QUERY = `#graphql
+query { 
+  profile(id: "eatski") { 
+    id
+    name
+    profession
+  }
+}
+`
+
+const SECOND_QUERY = `#graphql
 query { 
   site(id: "mercury") {
     description
@@ -61,15 +70,6 @@ query {
 }
 `
 
-const SECOND_QUERY = `#graphql
-query { 
-  profile(id: "eatski") { 
-    id
-    name
-    profession
-  }
-}
-`
 
 const THIRD_QUERY = `#graphql
 query {
@@ -126,8 +126,8 @@ const Controll: React.FC<ControllProps> = ({ setQuery,client,setClient,clearCach
       <legend>Query presets</legend>
       <div className={buttons}>
         <button className={switzh} onClick={() => setQuery(FIRST_QUERY)}>Landing</button>
-        <button className={switzh} onClick={() => setQuery(SECOND_QUERY)}>Profile 1</button>
-        <button className={switzh} onClick={() => setQuery(THIRD_QUERY)}>Profile 2</button>
+        <button className={switzh} onClick={() => setQuery(SECOND_QUERY)}>About this</button>
+        <button className={switzh} onClick={() => setQuery(THIRD_QUERY)}>Skill</button>
       </div>
     </fieldset>
     <fieldset>
