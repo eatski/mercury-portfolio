@@ -10,7 +10,7 @@ export const main = style({
     display: "flex",
     gap: "12px",
     height: "600px",
-    justifyContent: "center",
+    marginTop: "12px",
 })
 
 export const textarea = style({
@@ -35,15 +35,18 @@ export const json = style({
 
 })
 
+export const controlls = style({
+    display: "flex",
+    gap: "8px",
+})
+
 export const buttons = style({
     display: "flex",
     gap: "8px",
-    flexDirection: "column",
-    width: "200px",
 })
 
 export const switzh = style({
-    width: "100%",
+    width: "100px",
 })
 
 export const logDisplay = style({

@@ -1,17 +1,15 @@
 import { PropsWithChildren, Suspense, useEffect, useState } from 'react'
 import React from 'react'
-import { app, buttons, json, jsonContainer, logDisplay, main, switzh, textarea } from "./App.css"
+import { app, buttons, controlls, json, jsonContainer, logDisplay, main, switzh, textarea } from "./App.css"
 import { Provider, useQuery as useQueryByUrql } from "urql"
 import { client } from "./urql"
 import { parse, DocumentNode } from "graphql"
 import { useQueryByApolloClient } from './apollo'
-import { removeTypename } from './removeTypename'
 import { addListener } from './sqlLogging'
 
 function App() {
 
   const [query, setQuery] = useState(FIRST_QUERY);
-  const [rmTypename, setRmTypename] = useState(true);
   const [currentClient, setCurrentClient] = useState<ClientLibrary>("apollo");
   const parsed = (() => {
     try {
@@ -30,12 +28,12 @@ function App() {
     <Provider value={client}>
       <div className={app}>
         <h1>My Profile</h1>
+        <Controll client={currentClient} setClient={setCurrentClient} setQuery={setQuery} />
         <div className={main}>
-          <Controll client={currentClient} setClient={setCurrentClient} setQuery={setQuery} rmTypename={rmTypename} setRmTypename={() => setRmTypename(!rmTypename)} />
           <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)} />
           <ResultContainer>
             {parsed.query ? 
-              (currentClient === "apollo" ? <ApolloClientQuery query={parsed.query} rmTypename={rmTypename} /> : <UrqlQuery query={parsed.query} rmTypename={rmTypename}></UrqlQuery>) : <JsonStringify data={parsed.error} />}
+              (currentClient === "apollo" ? <ApolloClientQuery query={parsed.query}/> : <UrqlQuery query={parsed.query}></UrqlQuery>) : <JsonStringify data={parsed.error} />}
           </ResultContainer>
           <SqlDisplay />
         </div>
@@ -118,21 +116,20 @@ type ClientLibrary = "urql" | "apollo";
 
 type ControllProps = {
   setQuery: (query: string) => void;
-  rmTypename: boolean;
-  setRmTypename: () => void;
   client: ClientLibrary;
   setClient: (client: ClientLibrary) => void;
 }
 
-const Controll: React.FC<ControllProps> = ({ setQuery, setRmTypename,rmTypename,client,setClient }) => {
-  return <div className={buttons}>
-    <button className={switzh} onClick={() => setQuery(FIRST_QUERY)}>About</button>
-    <button className={switzh} onClick={() => setQuery(SECOND_QUERY)}>Skill 1</button>
-    <button className={switzh} onClick={() => setQuery(THIRD_QUERY)}>Skill 2</button>
-    <label>
-      Remove '__typename'
-      <input type="checkbox" checked={rmTypename} onChange={setRmTypename}></input>
-    </label>
+const Controll: React.FC<ControllProps> = ({ setQuery,client,setClient }) => {
+  return <div className={controlls}>
+    <fieldset>
+      <legend>Query presets</legend>
+      <div className={buttons}>
+        <button className={switzh} onClick={() => setQuery(FIRST_QUERY)}>About</button>
+        <button className={switzh} onClick={() => setQuery(SECOND_QUERY)}>Skill 1</button>
+        <button className={switzh} onClick={() => setQuery(THIRD_QUERY)}>Skill 2</button>
+      </div>
+    </fieldset>
     <fieldset>
       <legend>GraphQL Client</legend>
       <label>
@@ -157,25 +154,25 @@ const ResultContainer: React.FC<PropsWithChildren> = ({ children }) => {
     </Suspense>
   </section>
 }
-const ApolloClientQuery: React.FC<{ query: DocumentNode,rmTypename: boolean}> = ({ query,rmTypename }) => {
+const ApolloClientQuery: React.FC<{ query: DocumentNode}> = ({ query }) => {
   const { data, error } = useQueryByApolloClient({
     query,
   });
   if (error) {
     return <JsonStringify data={error} />
   } else {
-    return <JsonStringify  data={rmTypename ? removeTypename(data) : data} />
+    return <JsonStringify  data={data} />
   }
 }
 
-const UrqlQuery: React.FC<{ query: DocumentNode,rmTypename: boolean }> = ({ query,rmTypename }) => {
+const UrqlQuery: React.FC<{ query: DocumentNode}> = ({ query }) => {
   const [{ data, error }] = useQueryByUrql({
     query,
   });
   if (error) {
     return <JsonStringify data={error} />
   } else {
-    return <JsonStringify data={rmTypename ? removeTypename(data) : data} />
+    return <JsonStringify data={data} />
   }
 }
 
