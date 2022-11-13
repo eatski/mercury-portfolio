@@ -31,4 +31,5 @@
     description: String!,
     repositoryURL: String!
     technologyStacks: [Technology!]!
+    schema: String!
   }

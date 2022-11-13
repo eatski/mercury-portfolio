@@ -1,9 +1,10 @@
 import initSqlJs from "sql.js";
 import sqlWasm from "sql.js/dist/sql-wasm.wasm?url";
+import schemaUrl from "./schema.graphql?url";
 
 const initSql = `
-CREATE TABLE site (id char, description char, repository char);
-INSERT INTO site VALUES ('mercury', 'a browser-complete GraphQL portfolio', 'https://github.com/eatski/mercury-portfolio');
+CREATE TABLE site (id char, description char, repository char,schema char);
+INSERT INTO site VALUES ('mercury', 'a browser-complete GraphQL portfolio', 'https://github.com/eatski/mercury-portfolio', '${new URL(import.meta.url,schemaUrl).href}');
 CREATE TABLE profile (id char, name char, profession char);
 INSERT INTO profile VALUES ('eatski', 'Itsuki Haga', 'Front-end Engineer');
 CREATE TABLE proficiency (id int, description char, emoji char);

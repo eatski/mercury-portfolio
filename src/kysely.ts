@@ -39,6 +39,7 @@ interface Database {
         id: string,
         description: string,
         repository: string,
+        schema: string
     }
 }
 

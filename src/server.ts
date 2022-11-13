@@ -13,7 +13,7 @@ const neverUsedValue = () => null as never
 const resolvers: Resolvers<Context> = {
   Query: {
     site: async (_,args) => {
-      const site = (await builder.selectFrom("site").select("id").select("description").select("repository").where("id","=",args.id).execute()).at(0);
+      const site = (await builder.selectFrom("site").select("id").select("description").select("repository").select("schema").where("id","=",args.id).execute()).at(0);
       if(!site){
         return null
       }
@@ -21,6 +21,7 @@ const resolvers: Resolvers<Context> = {
         id: site.id,
         description: site.description,
         repositoryURL: site.repository,
+        schema: site.schema,
         technologyStacks: neverUsedValue()
       }
     },

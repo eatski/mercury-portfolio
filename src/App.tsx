@@ -53,6 +53,7 @@ query {
   site(id: "mercury") {
     description
     repositoryURL
+    schema
     technologyStacks {
       name
     }
