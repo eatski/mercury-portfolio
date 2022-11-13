@@ -142,8 +142,24 @@ const Controll: React.FC<ControllProps> = ({ setQuery,client,setClient }) => {
   </div>
 }
 
+const normalizeJson = (json: any) => {
+  if(json instanceof Object) {
+    const result: Record<string | number,Object> = {};
+    const keys = Object.keys(json);
+    keys.sort();
+    keys.forEach((key) => {
+      //@ts-ignore
+      result[key] = normalizeJson(json[key]);
+    })
+    return result
+  } else {
+    return json
+  }
+  
+}
+
 const JsonStringify = ({ data }: { data: unknown }) => {
-  return <pre className={json}>{JSON.stringify(data, null, 3)}</pre>
+  return <pre className={json}>{JSON.stringify(normalizeJson(data), null, 3)}</pre>
 }
 
 const ResultContainer: React.FC<PropsWithChildren> = ({ children }) => {
