@@ -56,11 +56,7 @@ query {
     technologyStacks {
       name
     }
-  } 
-  profile { 
-    id
-    name
-  } 
+  }
 }
 `
 
