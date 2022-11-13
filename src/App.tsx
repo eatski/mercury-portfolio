@@ -113,6 +113,7 @@ const SqlDisplay: React.FC = () => {
     <section className={logDisplay}>
       <h2>SQL</h2>
       {logs.map(({id,sql}) => <div key={id}>{sql}</div>)}
+      {logs.length ? <button onClick={() => setLogs([])}>clear</button> : null}
     </section>
   )
 }
