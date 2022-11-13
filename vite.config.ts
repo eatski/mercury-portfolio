@@ -10,5 +10,8 @@ export default defineConfig({
     esbuildOptions : {
         target: "es2020"
     }
+  },
+  build: {
+    assetsInlineLimit: 0
   }
 })
