@@ -13,7 +13,7 @@ const neverUsedValue = () => null as never
 const resolvers: Resolvers<Context> = {
   Query: {
     site: async (_,args) => {
-      const site = (await builder.selectFrom("site").select("id").select("description").select("repository").select("schema").where("id","=",args.id).execute()).at(0);
+      const site = (await builder.selectFrom("site").select("id").select("description").select("repository").select("schema").where("id","=",args.id).execute())[0];
       if(!site){
         return null
       }
@@ -26,7 +26,7 @@ const resolvers: Resolvers<Context> = {
       }
     },
     profile: async (_,args) => {
-      const profile = await (await builder.selectFrom("profile").select("id").select("name").select("profession").where("id","=",args.id).execute()).at(0);
+      const profile = await (await builder.selectFrom("profile").select("id").select("name").select("profession").where("id","=",args.id).execute())[0];
       if(!profile){
         return null
       }
