@@ -1,35 +1,35 @@
- type Proficiency {
-    id: ID!
-    description: String!
-    emoji: String!
-}
-  type Technology {
-    id: ID!,
-    name: String!
-  }
-  type Skill {
-    id: ID!,
-    technologies: [AcquiredTechnology!]!
-  }
-  type AcquiredTechnology {
-    id: ID!,
-    technology: Technology!,
-    proficiency: Proficiency!
-  }
-  type Profile {
-    id: ID!,
-    name: String!,
-    profession: String!,
-    skill: Skill!
-  }
-  type Query {
+type Query {
     site(id: String!): Site,
     profile(id: String!): Profile
-  }
-  type Site {
+}
+type Site {
     id: ID!,
     description: String!,
     repository: String!
     technologyStacks: [Technology!]!
     schema: String!
-  }
+}
+type Skill {
+    id: ID!,
+    technologies: [AcquiredTechnology!]!
+}
+type AcquiredTechnology {
+    id: ID!,
+    technology: Technology!,
+    proficiency: Proficiency!
+}
+type Profile {
+    id: ID!,
+    name: String!,
+    profession: String!,
+    skill: Skill!
+}
+type Proficiency {
+    id: ID!
+    description: String!
+    emoji: String!
+}
+type Technology {
+    id: ID!,
+    name: String!
+}
