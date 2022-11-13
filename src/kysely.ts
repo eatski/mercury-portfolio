@@ -4,12 +4,12 @@ import { dispatch } from "./sqlLogging"
 
 interface Database {
     profile: {
-        id: number,
+        id: string,
         name: string,
     },
     language_profile: {
         language_id: number,
-        profile_id: number,
+        profile_id: string,
         proficiency_id: number,
     },
     language: {
@@ -27,7 +27,7 @@ interface Database {
     },
     technology_profile: {
         technology_id: number,
-        profile_id: number,
+        profile_id: string,
         proficiency_id: number,
     },
     technology_site: {

@@ -20,8 +20,8 @@ const resolvers: Resolvers<Context> = {
         technologyStacks: neverUsedValue()
       }
     },
-    profile: async () => {
-      const [result] = await builder.selectFrom("profile").select("id").select("name").execute();
+    profile: async (_,args) => {
+      const [result] = await builder.selectFrom("profile").select("id").select("name").where("id","=",args.id).execute();
       return {
         id: result.id.toString(),
         name: result.name,
@@ -35,7 +35,7 @@ const resolvers: Resolvers<Context> = {
           .selectFrom("language_profile")
           .select("language_id")
           .select("proficiency_id")
-          .where("profile_id","=",parseInt(parent.id))
+          .where("profile_id","=",parent.id)
           .execute();
         return {
           id: parent.id,
@@ -76,7 +76,7 @@ const resolvers: Resolvers<Context> = {
         .selectFrom("technology_profile")
         .select("technology_id")
         .select("proficiency_id")
-        .where("profile_id","=",parseInt(parent.id))
+        .where("profile_id","=",parent.id)
         .execute();
       return result.map(item => ({
         id: `${item.technology_id}`,

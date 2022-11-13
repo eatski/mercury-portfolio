@@ -33,7 +33,7 @@
   }
   type Query {
     site: Site!,
-    profile: Profile!
+    profile(id: String!): Profile!
   }
   type Site {
     id: ID!,

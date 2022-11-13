@@ -62,7 +62,7 @@ query {
 
 const SECOND_QUERY = `#graphql
 query { 
-  profile { 
+  profile(id: "eatski") { 
     id
     skill {
       id
@@ -81,7 +81,7 @@ query {
 
 const THIRD_QUERY = `#graphql
 query {
-  profile { 
+  profile(id: "eatski") { 
     id
     skill {
       id
