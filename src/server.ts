@@ -122,15 +122,15 @@ export const server = new ApolloServerBase<Context>({
   context: () => {
     return {
       languageLoader: new Loader<number,Record<number,string>>(async (keys) => {
-        const result = await builder.selectFrom("language").select("id").select("name").where("id", "in",keys).execute();
+        const result = await builder.selectFrom("language").select("id").select("name").where("id", "in",Array.from(keys)).execute();
         return Object.fromEntries(result.map(item => [item.id, item.name]))
       }),
       proficiencyLoader: new Loader<number,Record<number,Omit<Proficiency,"id">>>(async (keys) => {
-        const result = await builder.selectFrom("proficiency").select("id").select("description").select("emoji").where("id", "in",keys).execute();
+        const result = await builder.selectFrom("proficiency").select("id").select("description").select("emoji").where("id", "in",Array.from(keys)).execute();
         return Object.fromEntries(result.map(item => [item.id, item]))
       }),
       technologyLoader: new Loader<number,Record<number,Omit<Technology,"id">>>(async (keys) => {
-        const result = await builder.selectFrom("technology").select("id").select("name").where("id", "in",keys).execute();
+        const result = await builder.selectFrom("technology").select("id").select("name").where("id", "in",Array.from(keys)).execute();
         return Object.fromEntries(result.map(item => [item.id, item]))
       })
     }
