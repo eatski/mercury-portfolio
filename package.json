@@ -7,10 +7,8 @@
     "dev": "vite",
     "build": "graphql-codegen && vite build",
     "preview": "vite preview --base /mercury-portfolio",
-    "preinstall": "graphql-codegen",
-    "postinstall": "msw init public/ --save && husky install",
-    "format": "rome format --write src",
-    "precommit": "lint-staged --allow-empty"
+    "prepare": "msw init public/ --save && husky install && graphql-codegen",
+    "format": "rome format --write src"
   },
   "dependencies": {
     "@apollo/client": "^3.7.1",
