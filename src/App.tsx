@@ -138,10 +138,10 @@ const Controll: React.FC<ControllProps> = ({ setQuery,client,setClient }) => {
     <fieldset>
       <legend>GraphQL Client</legend>
       <label>
-        <input type="radio" name="client" value="apollo" checked={client === "apollo"} onClick={() => setClient("apollo")}/>apollo
+        <input type="radio" name="client" value="apollo" checked={client === "apollo"} onChange={() => setClient("apollo")}/>apollo
       </label>
       <label>
-        <input type="radio" name="client" value="urql" checked={client === "urql"} onClick={() => setClient("urql")}/>urql
+        <input type="radio" name="client" value="urql" checked={client === "urql"} onChange={() => setClient("urql")}/>urql
       </label>
     </fieldset>
   </div>
