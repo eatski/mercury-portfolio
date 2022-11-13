@@ -15,6 +15,7 @@ export const main = style({
   gap: "12px",
   flexGrow: 1,
   marginTop: "12px",
+  minHeight: 0,
   "@media": {
     [MEDIAQUERY_SP]: {
       flexDirection: "column",
