@@ -50,7 +50,7 @@ function App() {
 
 const FIRST_QUERY = `#graphql
 query { 
-  site {
+  site(id: "mercury") {
     description
     repositoryURL
     technologyStacks {

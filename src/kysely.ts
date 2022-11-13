@@ -32,7 +32,12 @@ interface Database {
     },
     technology_site: {
         technology_id: number,
-        site_id: number,
+        site_id: string,
+    },
+    site: {
+        id: string,
+        description: string,
+        repository: string,
     }
 }
 

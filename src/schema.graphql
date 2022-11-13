@@ -32,7 +32,7 @@
     skill: Skill!
   }
   type Query {
-    site: Site!,
+    site(id: String!): Site!,
     profile(id: String!): Profile!
   }
   type Site {

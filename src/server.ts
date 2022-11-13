@@ -12,11 +12,12 @@ const neverUsedValue = () => null as never
 // A map of functions which return data for the schema.
 const resolvers: Resolvers<Context> = {
   Query: {
-    site: () => {
+    site: async (_,args) => {
+      const [site] = await builder.selectFrom("site").select("id").select("description").select("repository").where("id","=",args.id).execute();
       return {
-        id: "profile-graphql-sqlite",
-        description: "a browser-complete GraphQL demo page",
-        repositoryURL: "https://github.com/eatski/profile-graphql-sqlite",
+        id: site.id,
+        description: site.description,
+        repositoryURL: site.repository,
         technologyStacks: neverUsedValue()
       }
     },
