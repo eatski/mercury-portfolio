@@ -3,23 +3,13 @@
     description: String!
     emoji: String!
 }
-  type Language {
-    id: ID!,
-    name: String!
-  }
   type Technology {
     id: ID!,
     name: String!
   }
   type Skill {
     id: ID!,
-    languages: [AcquiredLanguage!]!,
     technologies: [AcquiredTechnology!]!
-  }
-  type AcquiredLanguage {
-    id: ID!,
-    language: Language!,
-    proficiency: Proficiency!
   }
   type AcquiredTechnology {
     id: ID!,

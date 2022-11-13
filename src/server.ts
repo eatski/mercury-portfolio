@@ -38,34 +38,10 @@ const resolvers: Resolvers<Context> = {
   },
   Profile: {
     skill: async (parent) => {
-        const result = await builder
-          .selectFrom("language_profile")
-          .select("language_id")
-          .select("proficiency_id")
-          .where("profile_id","=",parent.id)
-          .execute();
         return {
           id: parent.id,
-          languages: result.map(item => ({
-            id: `${item.language_id}`,
-            language: {
-              id: item.language_id.toString(),
-              name: neverUsedValue()
-            },
-            proficiency: {
-              id: item.proficiency_id.toString(),
-              description: neverUsedValue(),
-              emoji: neverUsedValue()
-            }
-          })),
           technologies: neverUsedValue(),
         }
-    },
-  },
-  Language: {
-    name: async (parent,_,{languageLoader}) => {
-        const name = await languageLoader.load(parseInt(parent.id));
-        return name
     },
   },
   Site: {

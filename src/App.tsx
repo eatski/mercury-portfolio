@@ -64,18 +64,8 @@ const SECOND_QUERY = `#graphql
 query { 
   profile(id: "eatski") { 
     id
-    skill {
-      id
-      languages {
-        language {
-          name
-        }
-        proficiency {
-          emoji
-        }
-      }
-    }
-  } 
+    name
+  }
 }
 `
 
