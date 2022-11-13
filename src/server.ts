@@ -13,7 +13,10 @@ const neverUsedValue = () => null as never
 const resolvers: Resolvers<Context> = {
   Query: {
     site: async (_,args) => {
-      const [site] = await builder.selectFrom("site").select("id").select("description").select("repository").where("id","=",args.id).execute();
+      const site = (await builder.selectFrom("site").select("id").select("description").select("repository").where("id","=",args.id).execute()).at(0);
+      if(!site){
+        return null
+      }
       return {
         id: site.id,
         description: site.description,
@@ -22,10 +25,13 @@ const resolvers: Resolvers<Context> = {
       }
     },
     profile: async (_,args) => {
-      const [result] = await builder.selectFrom("profile").select("id").select("name").where("id","=",args.id).execute();
+      const profile = await (await builder.selectFrom("profile").select("id").select("name").where("id","=",args.id).execute()).at(0);
+      if(!profile){
+        return null
+      }
       return {
-        id: result.id.toString(),
-        name: result.name,
+        id: profile.id,
+        name: profile.name,
         skill: neverUsedValue(),
       }
     }

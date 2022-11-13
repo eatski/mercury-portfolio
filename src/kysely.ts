@@ -64,18 +64,18 @@ export const builder = new Kysely<Database>({
                 const connection: DatabaseConnection = {
                     executeQuery: function <R>(compiledQuery: CompiledQuery): Promise<QueryResult<R>> {
                         dispatch(replacePlaceholder(compiledQuery.sql, compiledQuery.parameters))
-                        const [result] = db.exec(compiledQuery.sql,compiledQuery.parameters as any)
+                        const result = db.exec(compiledQuery.sql,compiledQuery.parameters as any).at(0)
                         return new Promise((resolve) => {
                             // dummy timeout to simulate async
                             setTimeout(() => {
                                 resolve({
-                                    rows: result.values.map(value => {
+                                    rows: result ? result.values.map(value => {
                                         const row : Record<string,unknown>= {};
                                         result.columns.forEach((c,i) => {
                                             row[c] = value[i]
                                         })
                                         return row
-                                    }) as any
+                                    }) : [] as any
                                 })
                             }, 100);
                         });
