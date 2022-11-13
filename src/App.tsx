@@ -1,11 +1,12 @@
-import { PropsWithChildren, Suspense, useState } from 'react'
+import { PropsWithChildren, Suspense, useEffect, useState } from 'react'
 import React from 'react'
-import { app, buttons, json, jsonContainer, main, switzh, textarea } from "./App.css"
+import { app, buttons, json, jsonContainer, logDisplay, main, switzh, textarea } from "./App.css"
 import { Provider, useQuery as useQueryByUrql } from "urql"
 import { client } from "./urql"
 import { parse, DocumentNode } from "graphql"
 import { useQueryByApolloClient } from './apollo'
 import { removeTypename } from './removeTypename'
+import { addListener } from './sqlLogging'
 
 function App() {
 
@@ -34,8 +35,8 @@ function App() {
           <ResultContainer label='Apollo Client'>
             {parsed.query ? <ApolloClientQuery query={parsed.query} rmTypename={rmTypename} /> : <JsonStringify data={parsed.error} />}
           </ResultContainer>
-          <ResultContainer label='Urql'>
-            {parsed.query ? <UrqlQuery query={parsed.query} rmTypename={rmTypename} /> : <JsonStringify data={parsed.error} />}
+          <ResultContainer label='SQL'>
+            <SqlDisplay />
           </ResultContainer>
         </div>
       </div>
@@ -97,6 +98,20 @@ query {
   }
 }
 `
+
+const SqlDisplay: React.FC = () => {
+  const [logs,setLogs] = useState<string[]>([]);
+  useEffect(() => {
+    return addListener((sql) => {
+      setLogs((logs) => [...logs,sql]);
+    })
+  },[setLogs])
+  return (
+    <div className={logDisplay}>
+      {logs.map((sql) => <div key={sql}>{sql}</div>)}
+    </div>
+  )
+}
 
 const Buttons: React.FC<{ onClick: (query: string) => void, setRmTypename: () => void,rmTypename: boolean }> = ({ onClick, setRmTypename,rmTypename }) => {
   return <div className={buttons}>

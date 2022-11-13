@@ -1,5 +1,6 @@
 import {Kysely,SqliteAdapter,SqliteIntrospector,SqliteQueryCompiler,DummyDriver,Driver, DatabaseConnection, TransactionSettings, CompiledQuery, QueryResult} from "kysely"
 import { dbPromise } from "./db"
+import { dispatch } from "./sqlLogging"
 
 interface Database {
     profile: {
@@ -35,6 +36,14 @@ interface Database {
     }
 }
 
+const replacePlaceholder = (query: string, params: readonly any[]) => {
+    let newQuery = query
+    for (const param of params) {
+        newQuery = newQuery.replace("?", param)
+    }
+    return newQuery
+}
+
 export const builder = new Kysely<Database>({
     dialect: {
       createAdapter() {
@@ -50,6 +59,7 @@ export const builder = new Kysely<Database>({
                 const connection: DatabaseConnection = {
                     executeQuery: function <R>(compiledQuery: CompiledQuery): Promise<QueryResult<R>> {
                         console.log(compiledQuery.sql,compiledQuery.parameters);
+                        dispatch(replacePlaceholder(compiledQuery.sql, compiledQuery.parameters))
                         const [result] = db.exec(compiledQuery.sql,compiledQuery.parameters as any)
                         return new Promise((resolve) => {
                             // dummy timeout to simulate async

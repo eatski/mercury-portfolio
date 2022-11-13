@@ -20,7 +20,6 @@ export const textarea = style({
 })
 
 export const jsonContainer = style({
-    width: "440px",
     border: "1px solid #022C43",
     overflow: "scroll",
     padding: "12px",
@@ -28,7 +27,7 @@ export const jsonContainer = style({
 })
 
 export const json = style({
-    width: "440px",
+    width: "400px",
     fontSize: "14px",
     margin: 0,
     whiteSpace: "pre-wrap",
@@ -44,4 +43,8 @@ export const buttons = style({
 
 export const switzh = style({
     width: "100%",
+})
+
+export const logDisplay = style({
+    fontSize: "14px",
 })
