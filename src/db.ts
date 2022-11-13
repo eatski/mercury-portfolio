@@ -3,9 +3,9 @@ import sqlWasm from "sql.js/dist/sql-wasm.wasm?url";
 
 const initSql = `
 CREATE TABLE site (id char, description char, repository char);
-INSERT INTO site VALUES ('mercury', 'a browser-complete GraphQL demo', '');
-CREATE TABLE profile (id char, name char);
-INSERT INTO profile VALUES ('eatski', 'Itsuki Haga');
+INSERT INTO site VALUES ('mercury', 'a browser-complete GraphQL portfolio', 'https://github.com/eatski/mercury-portfolio');
+CREATE TABLE profile (id char, name char, profession char);
+INSERT INTO profile VALUES ('eatski', 'Itsuki Haga', 'Front-end Engineer');
 CREATE TABLE proficiency (id int, description char, emoji char);
 INSERT INTO proficiency VALUES (0, 'beginner', '👶');
 INSERT INTO proficiency VALUES (1, 'fun', '💓');

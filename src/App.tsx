@@ -29,7 +29,7 @@ function App() {
     <UrqlProvider value={urqlClient}>
       <ApolloContext.Provider value={apolloClient} >
         <div className={app}>
-          <h1>My Profile</h1>
+          <h1>Mercury（Portfolio）</h1>
           <Controll client={currentClientType} setClient={setCurrentClientType} setQuery={setQuery} clearCache={() => {
             setClient([createUrql(),createClientWithFailureCache()])
           }}/>
@@ -65,6 +65,7 @@ query {
   profile(id: "eatski") { 
     id
     name
+    profession
   }
 }
 `

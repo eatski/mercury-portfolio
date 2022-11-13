@@ -25,13 +25,14 @@ const resolvers: Resolvers<Context> = {
       }
     },
     profile: async (_,args) => {
-      const profile = await (await builder.selectFrom("profile").select("id").select("name").where("id","=",args.id).execute()).at(0);
+      const profile = await (await builder.selectFrom("profile").select("id").select("name").select("profession").where("id","=",args.id).execute()).at(0);
       if(!profile){
         return null
       }
       return {
         id: profile.id,
         name: profile.name,
+        profession: profile.profession,
         skill: neverUsedValue(),
       }
     }

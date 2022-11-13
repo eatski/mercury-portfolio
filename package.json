@@ -1,12 +1,12 @@
 {
-  "name": "profile-graphql-sqlite",
+  "name": "mercury-portfolio",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "graphql-codegen && vite build",
-    "preview": "vite preview --base /profile-graphql-sqlite",
+    "preview": "vite preview --base /mercury-portfolio",
     "preinstall": "graphql-codegen",
     "postinstall": "msw init public/ --save"
   },

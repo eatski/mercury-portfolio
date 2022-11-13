@@ -19,6 +19,7 @@
   type Profile {
     id: ID!,
     name: String!,
+    profession: String!,
     skill: Skill!
   }
   type Query {

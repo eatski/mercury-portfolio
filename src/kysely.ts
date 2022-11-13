@@ -6,6 +6,7 @@ interface Database {
     profile: {
         id: string,
         name: string,
+        profession: string,
     },
     language_profile: {
         language_id: number,
