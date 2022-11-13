@@ -11,7 +11,6 @@ function App() {
 
   const [query, setQuery] = useState(FIRST_QUERY);
   const [rmTypename, setRmTypename] = useState(true);
-  console.log(rmTypename)
   const parsed = (() => {
     try {
       return {
