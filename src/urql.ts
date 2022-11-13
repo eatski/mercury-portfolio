@@ -1,6 +1,7 @@
-import { createClient as createClientInner } from 'urql';
+import { createClient as createClientInner } from "urql";
 
-export const createClient = () => createClientInner({
-  url: '/graphql',
-  suspense: true,
-});
+export const createClient = () =>
+	createClientInner({
+		url: "/graphql",
+		suspense: true,
+	});

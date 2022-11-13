@@ -8,7 +8,8 @@
     "build": "graphql-codegen && vite build",
     "preview": "vite preview --base /mercury-portfolio",
     "preinstall": "graphql-codegen",
-    "postinstall": "msw init public/ --save"
+    "postinstall": "msw init public/ --save",
+    "format": "rome format --write src"
   },
   "dependencies": {
     "@apollo/client": "^3.7.1",
@@ -30,6 +31,7 @@
     "@vanilla-extract/vite-plugin": "^3.6.1",
     "@vitejs/plugin-react": "^2.2.0",
     "msw": "^0.48.1",
+    "rome": "^10.0.1",
     "typescript": "^4.6.4",
     "vite": "^3.2.0"
   },

@@ -4,7 +4,9 @@ import schemaUrl from "./schema.graphql?url";
 
 const initSql = `
 CREATE TABLE site (id char, description char, repository char,schema char);
-INSERT INTO site VALUES ('mercury', 'a browser-complete GraphQL portfolio', 'https://github.com/eatski/mercury-portfolio', '${new URL(schemaUrl,import.meta.url).href}');
+INSERT INTO site VALUES ('mercury', 'a browser-complete GraphQL portfolio', 'https://github.com/eatski/mercury-portfolio', '${
+	new URL(schemaUrl, import.meta.url).href
+}');
 CREATE TABLE profile (id char, name char, profession char);
 INSERT INTO profile VALUES ('eatski', 'Itsuki Haga', 'Front-end Engineer');
 CREATE TABLE proficiency (id int, description char, emoji char);
@@ -44,10 +46,12 @@ INSERT INTO technology_site VALUES (4, 'mercury');
 INSERT INTO technology_site VALUES (5, 'mercury');
 INSERT INTO technology_site VALUES (8, 'mercury');
 INSERT INTO technology_site VALUES (9, 'mercury');
-`
+`;
 
-export const dbPromise = initSqlJs({ locateFile: () => new URL(sqlWasm, import.meta.url).href }).then(SQL => {
-  const db = new SQL.Database();
-  db.run(initSql); // Run the query without returning anything
-  return db
-})
+export const dbPromise = initSqlJs({
+	locateFile: () => new URL(sqlWasm, import.meta.url).href,
+}).then((SQL) => {
+	const db = new SQL.Database();
+	db.run(initSql); // Run the query without returning anything
+	return db;
+});
