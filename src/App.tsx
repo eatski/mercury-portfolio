@@ -1,16 +1,17 @@
 import { PropsWithChildren, Suspense, useEffect, useState } from 'react'
 import React from 'react'
 import { app, buttons, controlls, json, jsonContainer, logDisplay, main, switzh, textarea } from "./App.css"
-import { Provider, useQuery as useQueryByUrql } from "urql"
-import { client } from "./urql"
+import { Provider as UrqlProvider, useQuery as useQueryByUrql } from "urql"
+import { createClient as createUrql } from "./urql"
 import { parse, DocumentNode } from "graphql"
-import { useQueryByApolloClient } from './apollo'
+import { useQueryByApolloClient,Context as ApolloContext, createClientWithFailureCache } from './apollo'
 import { addListener } from './sqlLogging'
 
 function App() {
 
   const [query, setQuery] = useState(FIRST_QUERY);
-  const [currentClient, setCurrentClient] = useState<ClientLibrary>("apollo");
+  const [currentClientType, setCurrentClientType] = useState<ClientLibrary>("apollo");
+  const [[urqlClient,apolloClient], setClient] = useState(() => [createUrql(),createClientWithFailureCache()]);
   const parsed = (() => {
     try {
       return {
@@ -25,20 +26,24 @@ function App() {
   })();
 
   return (
-    <Provider value={client}>
-      <div className={app}>
-        <h1>My Profile</h1>
-        <Controll client={currentClient} setClient={setCurrentClient} setQuery={setQuery} />
-        <div className={main}>
-          <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)} />
-          <ResultContainer>
-            {parsed.query ? 
-              (currentClient === "apollo" ? <ApolloClientQuery query={parsed.query}/> : <UrqlQuery query={parsed.query}></UrqlQuery>) : <JsonStringify data={parsed.error} />}
-          </ResultContainer>
-          <SqlDisplay />
+    <UrqlProvider value={urqlClient}>
+      <ApolloContext.Provider value={apolloClient} >
+        <div className={app}>
+          <h1>My Profile</h1>
+          <Controll client={currentClientType} setClient={setCurrentClientType} setQuery={setQuery} clearCache={() => {
+            setClient([createUrql(),createClientWithFailureCache()])
+          }}/>
+          <div className={main}>
+            <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)} />
+            <ResultContainer>
+              {parsed.query ? 
+                (currentClientType === "apollo" ? <ApolloClientQuery query={parsed.query}/> : <UrqlQuery query={parsed.query}></UrqlQuery>) : <JsonStringify data={parsed.error} />}
+            </ResultContainer>
+            <SqlDisplay />
+          </div>
         </div>
-      </div>
-    </Provider>
+      </ApolloContext.Provider>
+    </UrqlProvider>
   )
 }
 
@@ -124,9 +129,10 @@ type ControllProps = {
   setQuery: (query: string) => void;
   client: ClientLibrary;
   setClient: (client: ClientLibrary) => void;
+  clearCache: () => void;
 }
 
-const Controll: React.FC<ControllProps> = ({ setQuery,client,setClient }) => {
+const Controll: React.FC<ControllProps> = ({ setQuery,client,setClient,clearCache }) => {
   return <div className={controlls}>
     <fieldset>
       <legend>Query presets</legend>
@@ -144,6 +150,10 @@ const Controll: React.FC<ControllProps> = ({ setQuery,client,setClient }) => {
       <label>
         <input type="radio" name="client" value="urql" checked={client === "urql"} onChange={() => setClient("urql")}/>urql
       </label>
+    </fieldset>
+    <fieldset>
+      <legend>Other Controlls</legend>
+      <button onClick={clearCache}>clear client cache</button>
     </fieldset>
   </div>
 }
