@@ -58,7 +58,6 @@ export const builder = new Kysely<Database>({
                 const db = await dbPromise;
                 const connection: DatabaseConnection = {
                     executeQuery: function <R>(compiledQuery: CompiledQuery): Promise<QueryResult<R>> {
-                        console.log(compiledQuery.sql,compiledQuery.parameters);
                         dispatch(replacePlaceholder(compiledQuery.sql, compiledQuery.parameters))
                         const [result] = db.exec(compiledQuery.sql,compiledQuery.parameters as any)
                         return new Promise((resolve) => {
