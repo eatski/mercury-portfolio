@@ -52,7 +52,7 @@ const FIRST_QUERY = `#graphql
 query { 
   site(id: "mercury") {
     description
-    repositoryURL
+    repository
     schema
     technologyStacks {
       name

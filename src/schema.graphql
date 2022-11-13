@@ -29,7 +29,7 @@
   type Site {
     id: ID!,
     description: String!,
-    repositoryURL: String!
+    repository: String!
     technologyStacks: [Technology!]!
     schema: String!
   }

@@ -20,7 +20,7 @@ const resolvers: Resolvers<Context> = {
       return {
         id: site.id,
         description: site.description,
-        repositoryURL: site.repository,
+        repository: site.repository,
         schema: site.schema,
         technologyStacks: neverUsedValue()
       }
