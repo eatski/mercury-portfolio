@@ -32,12 +32,10 @@ function App() {
         <div className={main}>
           <Buttons onClick={setQuery} rmTypename={rmTypename} setRmTypename={() => setRmTypename(!rmTypename)} />
           <textarea className={textarea} value={query} onInput={(e) => setQuery((e.target as HTMLTextAreaElement).value)} />
-          <ResultContainer label='Apollo Client'>
+          <ResultContainer>
             {parsed.query ? <ApolloClientQuery query={parsed.query} rmTypename={rmTypename} /> : <JsonStringify data={parsed.error} />}
           </ResultContainer>
-          <ResultContainer label='SQL'>
-            <SqlDisplay />
-          </ResultContainer>
+          <SqlDisplay />
         </div>
       </div>
     </Provider>
@@ -107,9 +105,10 @@ const SqlDisplay: React.FC = () => {
     })
   },[setLogs])
   return (
-    <div className={logDisplay}>
+    <section className={logDisplay}>
+      <h2>SQL</h2>
       {logs.map((sql) => <div key={sql}>{sql}</div>)}
-    </div>
+    </section>
   )
 }
 
@@ -129,9 +128,9 @@ const JsonStringify = ({ data }: { data: unknown }) => {
   return <pre className={json}>{JSON.stringify(data, null, 3)}</pre>
 }
 
-const ResultContainer: React.FC<PropsWithChildren<{ label: string }>> = ({ children, label }) => {
+const ResultContainer: React.FC<PropsWithChildren> = ({ children }) => {
   return <section className={jsonContainer}>
-    <h2>{label}</h2>
+    <h2>Result</h2>
     <Suspense fallback={"loading"}>
       {children}
     </Suspense>
