@@ -7,6 +7,7 @@ import {
   json,
   jsonContainer,
   logDisplay,
+  logDisplayContainer,
   main,
   switzh,
   textarea,
@@ -135,11 +136,13 @@ const SqlDisplay: React.FC = () => {
     });
   }, [setLogs]);
   return (
-    <section className={logDisplay}>
+    <section className={logDisplayContainer}>
       <h2>SQL</h2>
-      {logs.map(({ id, sql }) => (
-        <div key={id}>{sql}</div>
-      ))}
+      <div className={logDisplay}>
+        {logs.map(({ id, sql }) => (
+          <div key={id}>{sql}</div>
+        ))}
+      </div>
       {logs.length ? <button onClick={() => setLogs([])}>clear</button> : null}
     </section>
   );

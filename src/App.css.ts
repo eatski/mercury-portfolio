@@ -72,16 +72,19 @@ export const switzh = style({
   fontSize: "16px",
 });
 
-export const logDisplay = style({
+export const logDisplayContainer = style({
   border: "1px solid #022C43",
   overflow: "scroll",
   padding: "12px",
   background: "#F5F5F5",
-  fontSize: "14px",
-  width: "600px",
+  width: "540px",
   "@media": {
     [MEDIAQUERY_SP]: {
       width: "100%",
     },
   },
+});
+
+export const logDisplay = style({
+  fontSize: "14px",
 });
