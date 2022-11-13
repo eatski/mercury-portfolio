@@ -158,8 +158,10 @@ const Controll: React.FC<ControllProps> = ({ setQuery,client,setClient,clearCach
   </div>
 }
 
-const normalizeJson = (json: any) => {
-  if(json instanceof Object) {
+const normalizeJson = (json: any): unknown=> {
+  if(json instanceof Array){
+    return json.map(normalizeJson);
+  } else if(json instanceof Object) {
     const result: Record<string | number,Object> = {};
     const keys = Object.keys(json);
     keys.sort();
