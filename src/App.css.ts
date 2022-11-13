@@ -3,6 +3,9 @@ import { style } from '@vanilla-extract/css';
 export const app = style({
     color: "#022C43",
     padding: "12px",
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
 })
 
 const MEDIAQUERY_SP = "screen and (max-width: 768px)"
@@ -10,7 +13,7 @@ const MEDIAQUERY_SP = "screen and (max-width: 768px)"
 export const main = style({
     display: "flex",
     gap: "12px",
-    height: "480px",
+    flexGrow: 1,
     marginTop: "12px",
     "@media": {
         [MEDIAQUERY_SP]: {
