@@ -1,14 +1,19 @@
 import { style } from "@vanilla-extract/css";
 
+const MEDIAQUERY_SP = "screen and (max-width: 768px)";
+
 export const app = style({
   color: "#022C43",
   padding: "12px",
   height: "100vh",
   display: "flex",
   flexDirection: "column",
+  "@media": {
+    [MEDIAQUERY_SP]: {
+      height: "auto",
+    },
+  },
 });
-
-const MEDIAQUERY_SP = "screen and (max-width: 768px)";
 
 export const main = style({
   display: "flex",
