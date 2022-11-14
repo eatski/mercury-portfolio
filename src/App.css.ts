@@ -31,6 +31,7 @@ export const main = style({
 });
 
 export const textarea = style({
+  color: "#022C43",
   width: "240px",
   height: "100%",
   padding: "12px",
@@ -74,6 +75,7 @@ export const buttons = style({
 });
 
 export const switzh = style({
+  color: "#022C43",
   fontSize: "16px",
 });
 
